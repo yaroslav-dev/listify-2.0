@@ -28,6 +28,5 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "vite.config.ts",
-    "src/registerServiceWorker.tsr.ts"
-, "src/registerServiceWorker.js", "src/registerServiceWorker.js"  ]
+  ]
 }
