@@ -1,7 +1,7 @@
 <template>
   <v-card class="col-md-6 my-2 d-flex align-center" color="#f8f6ff" elevation="0" density="default">
     <v-card-title class="px-0 pl-4 d-flex flex-grow-1">
-      Title
+      List
       <v-spacer></v-spacer>
       <span class="count">
         0/10</span>
