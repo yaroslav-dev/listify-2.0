@@ -1,12 +1,11 @@
 // Plugins
 import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import { VitePWA } from 'vite-plugin-pwa'
 
 // Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
-
-import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -24,10 +23,15 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Listify',
-        short_name: 'Listify',
-        description: 'Lists app',
-        theme_color: '#ffffff',
+        name: "Listify",
+        short_name: "Listify",
+        description: "Lists app",
+        theme_color: "#ffffff",
+        background_color: "#ffffff",
+        display: "standalone",
+        orientation: "portrait",
+        scope: "/",
+        start_url: "/",
         icons: [
           {
             src: 'img/icons/android-chrome-192x192.png',
@@ -40,13 +44,7 @@ export default defineConfig({
             type: 'image/png'
           },
           {
-            src: 'img/icons/android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            src: 'img/icons/apple-touch-icon-180x180.png',
+            src: 'img/icons/apple-touch-icon.png',
             sizes: '810x180',
             type: 'image/png'
           },
