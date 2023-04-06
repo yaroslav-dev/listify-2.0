@@ -46,7 +46,8 @@ export default defineConfig({
             purpose: 'any maskable'
           },
           {
-            src: 'img/icons/apple-touch-icon.png',
+            src: 'img/icons/apple-touch-icon-180x180.png',
+            sizes: '810x180',
             type: 'image/png'
           },
           {
