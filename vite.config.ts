@@ -44,8 +44,14 @@ export default defineConfig({
             type: 'image/png'
           },
           {
+            src: 'img/icons/android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
             src: 'img/icons/apple-touch-icon.png',
-            sizes: '810x180',
+            sizes: '180x180',
             type: 'image/png'
           },
           {
