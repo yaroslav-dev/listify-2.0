@@ -26,7 +26,7 @@ export default defineConfig({
         name: "Listify",
         short_name: "Listify",
         description: "Lists app",
-        theme_color: "#ffffff",
+        "theme_color": "#ffffff",
         background_color: "#ffffff",
         display: "standalone",
         orientation: "portrait",
