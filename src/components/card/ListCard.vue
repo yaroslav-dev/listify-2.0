@@ -1,7 +1,7 @@
 <template>
-  <v-card class="col-md-6 my-2 d-flex align-center" color="#f8f6ff" elevation="0" density="default">
+  <v-card v-for="list in lists" :key="list.id" class="col-md-6 my-2 d-flex align-center" color="#f8f6ff" elevation="0" density="default">
     <v-card-title class="px-0 pl-4 d-flex flex-grow-1">
-      List
+      {{ list.title }}
       <v-spacer></v-spacer>
       <span class="count">
         0/10</span>
@@ -24,6 +24,21 @@
   </v-card>
 </template>
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+import { useFirestore, useCollection } from 'vuefire'
+import { collection } from 'firebase/firestore'
+
+const db = useFirestore()
+
+const lists = useCollection(collection(db, 'lists'))
+
+// const props = defineProps(['lists'])
+
+onMounted(() => {
+  console.log(useCollection(collection(db, 'lists')))
+})
+
+// const items = reactive(props.lists)
 
 </script>
 <style></style>

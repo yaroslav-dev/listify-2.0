@@ -1,13 +1,14 @@
 <template>
-  <!-- <HelloWorld /> -->
   <v-container>
     <v-responsive>
-      <ListCard />
+      <ListCard :lists="lists" />
     </v-responsive>
   </v-container>
 </template>
 
 <script lang="ts" setup>
-  // import HelloWorld from '@/components/HelloWorld.vue'
   import ListCard from '@/components/card/ListCard.vue'
+  import { useListsStore } from "@/store/lists";
+
+  const lists = useListsStore()
 </script>
