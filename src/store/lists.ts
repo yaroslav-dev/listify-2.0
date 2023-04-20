@@ -1,21 +1,11 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { listsRef } from '@/firebase';
+import { useCollection } from 'vuefire'
 
-export const useListsStore = defineStore('lists', () => {
-  const lists = ref([
-    {
-      title: 'List 1',
-      id: 1
-    },
-    {
-      title: 'List 2',
-      id: 2
-    },
-    {
-      title: 'List 3',
-      id: 3
-    },
-  ])
-
-  return { lists }
+export const useListsStore = defineStore('lists', {
+  state: () => {
+    return {
+      lists: useCollection(listsRef),
+    }
+  },
 })

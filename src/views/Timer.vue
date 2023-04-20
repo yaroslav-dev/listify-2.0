@@ -10,6 +10,13 @@
   </v-container>
 </template>
 <script lang="ts" setup>
+import { useAppStore } from '@/store/app';
+import { onMounted } from 'vue';
 
+const store = useAppStore()
+
+onMounted(() => {
+  store.setTitle('Timer')
+})
 </script>
 <style></style>

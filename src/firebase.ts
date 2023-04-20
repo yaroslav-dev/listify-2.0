@@ -16,6 +16,6 @@ export const firebaseApp = initializeApp(firebaseConfig)
 
 export const analytics = getAnalytics(firebaseApp);
 
-const db = getFirestore(firebaseApp)
+export const db = getFirestore(firebaseApp)
 
 export const listsRef = collection(db, 'lists')
