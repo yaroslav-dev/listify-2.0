@@ -6,6 +6,8 @@
       </v-app-bar-title>
     </transition>
     <v-spacer></v-spacer>
+    {{ view + 'px' }}
+    <v-spacer></v-spacer>
     <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
       <v-icon icon="notifications"></v-icon>
     </v-app-bar-nav-icon>
@@ -20,11 +22,16 @@
 
 <script lang="ts" setup>
 import { useAppStore } from '@/store/app';
+import { computed } from 'vue';
 import { ref } from 'vue'
 
 const appStore = useAppStore()
 
 const drawer = ref<boolean>(false)
+
+const view = computed(() => {
+  return window.innerHeight
+})
 </script>
 
 <style scoped>
