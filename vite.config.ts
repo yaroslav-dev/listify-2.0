@@ -33,7 +33,7 @@ export default defineConfig({
         description: "Lists app",
         "theme_color": "#ffffff",
         background_color: "#ffffff",
-        display: "browser",
+        display: "fullscreen",
         orientation: "portrait",
         scope: "/",
         start_url: "/",
