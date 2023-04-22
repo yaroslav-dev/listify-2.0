@@ -26,7 +26,7 @@ onBeforeUnmount(() => {
 </script>
 <style scoped>
 .container {
-  height: 85vh;
+  flex-grow: 1;
 }
 .text-field {
   flex-grow: 0;
