@@ -3,9 +3,7 @@
     <v-responsive>
       <h3>Lol</h3>
     </v-responsive>
-    <!-- <v-app-bar order="1" class="input-bar pa-3" location="bottom" flat> -->
-      <TextField class="text-field" />
-    <!-- </v-app-bar> -->
+    <TextField class="text-field" />
   </v-container>
 </template>
 <script lang="ts" setup>
@@ -20,6 +18,7 @@ const store = useAppStore()
 onMounted(() => {
   store.setTitle(route.query.title)
 })
+
 onBeforeUnmount(() => {
   store.hideAppBar(false)
 })
@@ -28,10 +27,8 @@ onBeforeUnmount(() => {
 .container {
   flex-grow: 1;
 }
+
 .text-field {
   flex-grow: 0;
-}
-.input-bar {
-  height: 85px;
 }
 </style>

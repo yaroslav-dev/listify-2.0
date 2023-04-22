@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar absolute flat>
     <v-app-bar-title>
       <h3>{{ appStore.pageTitle }}</h3>
     </v-app-bar-title>
