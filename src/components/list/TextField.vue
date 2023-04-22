@@ -6,17 +6,8 @@ import { useAppStore } from '@/store/app';
 
 const store = useAppStore()
 
-if ('virtualKeyboard' in navigator) {
-  // The VirtualKeyboard API is supported!
-  // alert('virtual keyboard')
-}
-
 const hideKeyboard = (event: boolean) => {
   store.hideAppBar(event)
-  if ('virtualKeyboard' in navigator) {
-    // The VirtualKeyboard API is supported!
-    alert(navigator.virtualKeyboard)
-  }
 }
 </script>
 <style scoped>
