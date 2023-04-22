@@ -1,10 +1,8 @@
 <template>
   <v-app-bar flat>
-    <transition name="fade" mode="out-in">
     <v-app-bar-title>
-        <h3>{{ appStore.pageTitle }}</h3>
-      </v-app-bar-title>
-    </transition>
+      <h3>{{ appStore.pageTitle }}</h3>
+    </v-app-bar-title>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
       <v-icon icon="notifications"></v-icon>
@@ -26,15 +24,3 @@ const appStore = useAppStore()
 
 const drawer = ref<boolean>(false)
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity .1s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
