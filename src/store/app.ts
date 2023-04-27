@@ -14,7 +14,12 @@ export const useAppStore = defineStore('app', () => {
     keyboard.value = hide
   }
 
+  const inputFocus = ref(false)
+  const setFocus = (focus: boolean) => {
+    inputFocus.value = focus
+  }
+
   return {
-    pageTitle, keyboard, setTitle, hideNavBar
+    pageTitle, keyboard, inputFocus, setTitle, hideNavBar, setFocus
   }
 })
