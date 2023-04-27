@@ -18,4 +18,4 @@ export const analytics = getAnalytics(firebaseApp);
 
 export const db = getFirestore(firebaseApp)
 
-export const listsRef = collection(db, 'lists')
+export const usersRef = collection(db, 'users')

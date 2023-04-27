@@ -4,7 +4,7 @@
       {{ list.title }}
       <v-spacer></v-spacer>
       <span class="count">
-        0/{{ list.items.length }}</span>
+        {{ completed }}/{{ list.items.length }}</span>
     </v-card-title>
     <v-card-actions class="px-0 py-0">
       <v-menu bottom left close-on-click close-on-content-click>
@@ -23,6 +23,13 @@
   </v-card>
 </template>
 <script lang="ts" setup>
-defineProps(['list'])
+import { computed } from 'vue';
+
+const props = defineProps(['list'])
+
+const completed = computed(() => {
+  let comp = props.list.items.filter((item: any) => item.completed)
+  return comp.length
+})
 </script>
 <style></style>
