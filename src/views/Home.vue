@@ -35,10 +35,6 @@ const openList = (obj: any) => {
   router.push({
     path: `/list/${obj.id}`,
     name: 'List',
-    query: {
-      id: obj.id,
-      title: obj.title
-    },
   })
 }
 </script>

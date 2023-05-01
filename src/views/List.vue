@@ -1,9 +1,11 @@
 <template>
   <v-container class="container d-flex flex-column justify-space-between">
     <v-responsive>
-      <h3>{{ listsStore.currentList.title }}</h3>
+      <ListItem v-for="index in 16" :key="index" />
     </v-responsive>
-    <TextField class="text-field" />
+    <v-app-bar class="pt-0 px-2 pb-3" flat color="transparent" order="2" location="bottom">
+      <TextField class="text-field" />
+    </v-app-bar>
   </v-container>
 </template>
 <script lang="ts" setup>
@@ -12,6 +14,7 @@ import { useListsStore } from '@/store/lists';
 import { onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import TextField from '@/components/list/TextField.vue';
+import ListItem from '@/components/list/ListItem.vue';
 
 const router = useRouter()
 const store = useAppStore()
@@ -34,7 +37,7 @@ onBeforeUnmount(() => {
   flex-grow: 1;
 }
 
-.text-field {
+/* .text-field {
   flex-grow: 0;
-}
+} */
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <v-text-field @update:focused="focus($event)" class="input" label="Add item" variant="outlined" color="#db89f9" hide-details>
+  <v-text-field @update:focused="focus($event)" bg-color="#fff" class="input" label="Add item" variant="outlined" color="#db89f9" hide-details>
     <template v-if="store.inputFocus" #append-inner>
       <v-icon @click="addItem">add</v-icon>
     </template>
@@ -15,6 +15,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
   store.hideNavBar(false)
+  store.setFocus(false)
 })
 
 const focus = (event: boolean) => {
@@ -25,8 +26,3 @@ const addItem = () => {
   console.log('added')
 }
 </script>
-<style scoped>
-.v-field__outline {
-  border-radius: 50% !important;
-}
-</style>
