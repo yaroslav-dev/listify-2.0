@@ -1,1 +1,0 @@
-import{aY as r,aZ as a,a_ as o,a$ as s,b0 as i,N as n}from"./index.eb29ee6e.js";const u=r(),l=a("lists",()=>{const t=o(s(i(s(u,"users"),"sP3bh4BhXPkSaCFNZdC2"),"lists")),e=n({});return{lists:t,currentList:e}});export{l as u};
