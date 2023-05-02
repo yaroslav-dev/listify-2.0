@@ -1,7 +1,7 @@
 <template>
-  <v-text-field @update:focused="focus($event)" @focus="scrollDown()" bg-color="#fff" class="input" label="Add item" variant="outlined" color="#db89f9" hide-details>
+  <v-text-field @update:focused="focus($event)" @focus="scrollDown()" bg-color="#fff" class="input" label="Add item" variant="outlined" color="secondary" hide-details>
     <template v-if="store.inputFocus" #append-inner>
-      <v-icon @click="addItem">add</v-icon>
+      <v-icon @click="addItem" color="primary">add</v-icon>
     </template>
   </v-text-field>
 </template>

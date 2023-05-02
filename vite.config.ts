@@ -26,7 +26,7 @@ export default defineConfig({
       },
     }),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       manifest: {
         name: "Listify",
         short_name: "Listify",
