@@ -23,13 +23,13 @@ const focus = (event: boolean) => {
 }
 
 const scrollDown = () => {
-  setTimeout(function () {
+  setTimeout(() => {
     window.scrollTo({
       top: 9999,
       behavior: "smooth",
     });
     console.log('scroll')
-  }, 1000);
+  }, 500);
 }
 
 const addItem = () => {
