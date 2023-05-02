@@ -10,7 +10,7 @@
         <h3>{{ appStore.pageTitle }}</h3>
       </v-app-bar-title>
       <v-spacer key="2"></v-spacer>
-      <v-btn key="3" v-if="isListPage" @click="router.push('/')">done</v-btn>
+      <v-btn key="3" v-if="isListPage" @click="router.push('/')" color="primary">done</v-btn>
       <v-app-bar-nav-icon key="4" v-else variant="text" @click.stop="drawer = !drawer">
         <v-icon icon="notifications"></v-icon>
       </v-app-bar-nav-icon>

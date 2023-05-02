@@ -1,5 +1,5 @@
 <template>
-  <v-text-field @update:focused="focus($event)" bg-color="#fff" class="input" label="Add item" variant="outlined" color="#db89f9" hide-details>
+  <v-text-field @update:focused="focus($event)" @focus="scrollDown()" bg-color="#fff" class="input" label="Add item" variant="outlined" color="#db89f9" hide-details>
     <template v-if="store.inputFocus" #append-inner>
       <v-icon @click="addItem">add</v-icon>
     </template>
@@ -20,6 +20,16 @@ onUnmounted(() => {
 
 const focus = (event: boolean) => {
   store.setFocus(event)
+}
+
+const scrollDown = () => {
+  setTimeout(function () {
+    window.scrollTo({
+      top: 9999,
+      behavior: "smooth",
+    });
+    console.log('scroll')
+  }, 1000);
 }
 
 const addItem = () => {
