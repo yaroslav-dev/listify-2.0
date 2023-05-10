@@ -1,7 +1,7 @@
 <template>
   <v-card class="col-md-6 my-2 d-flex align-center" :color="itemColor" elevation="0" density="compact">
     <v-card-actions>
-       <v-checkbox v-model="listItem.completed" :ripple="false" color="primary" density="compact" hide-details></v-checkbox>
+      <v-checkbox v-model="listItem.completed" :ripple="false" color="primary" density="compact" hide-details></v-checkbox>
     </v-card-actions>
     <v-card-text>
       {{ listItem.title }}

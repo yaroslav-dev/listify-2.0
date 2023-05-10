@@ -31,6 +31,7 @@ let loading = computed(() => lists.value.length ? false : true)
 
 const router = useRouter()
 const openList = (obj: any) => {
+  store.hideNavBar(true)
   listsStore.currentList = obj
   router.push({
     path: `/list/${obj.id}`,

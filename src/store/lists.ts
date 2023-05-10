@@ -11,8 +11,16 @@ export const useListsStore = defineStore('lists', () => {
 
     const currentList = ref(<any>{})
 
+    const addItem = (newTitle: any) => {
+      currentList.value.items.push({
+        title: newTitle,
+        id: Date.now(),
+        completed: false
+      })
+    }
+
     return {
-      lists, currentList
+      lists, currentList, addItem
     }
   },
 )

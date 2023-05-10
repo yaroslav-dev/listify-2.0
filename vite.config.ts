@@ -13,9 +13,6 @@ export default defineConfig({
     vue({ 
       template: { 
         transformAssetUrls,
-        compilerOptions: {
-          isCustomElement: (tag) => ['swiper-container', 'swiper-slide'].includes(tag),
-        }
       }
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
@@ -26,12 +23,14 @@ export default defineConfig({
       },
     }),
     VitePWA({
-      registerType: 'prompt',
+      devOptions: {
+        enabled: false
+      },
       manifest: {
         name: "Listify",
         short_name: "Listify",
         description: "Lists app",
-        "theme_color": "#ffffff",
+        theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",
         orientation: "portrait",
