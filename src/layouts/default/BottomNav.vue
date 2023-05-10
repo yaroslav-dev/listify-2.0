@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation :height="!store.keyboard ? 56 : 0" v-model="navState" mandatory="force" mode="shift" color="#db88fa" grow>
+  <v-bottom-navigation :height="!store.keyboard ? 56 : 0" :style="{bottom: store.keyboard ? '-56px' : '0'}" v-model="navState" mandatory="force" mode="shift" color="#db88fa" grow>
     <v-btn @click="navToRoute('Home')" :value="navValue">
       <v-icon>list</v-icon>
       <span>Lists</span>
