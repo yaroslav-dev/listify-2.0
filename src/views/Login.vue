@@ -21,7 +21,7 @@ import { useAppStore } from '@/store/app';
 import { useUserStore } from '@/store/user';
 import { onBeforeUnmount, onBeforeMount, onMounted } from 'vue';
 import { useFirebaseAuth } from 'vuefire';
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { useRouter } from 'vue-router';
 import { usePersist } from '@/store/persist';
 
@@ -54,34 +54,28 @@ onMounted(() => {
 
 
 const signInWithGoogle = async () => {
-  signInWithPopup(auth, provider)
-    .then(result => {
-      const credential = GoogleAuthProvider.credentialFromResult(result)
-      const token = credential?.accessToken
-      const user = result.user
-      userStore.setUser(user)
+  signInWithRedirect(auth, provider)
+    .then(() => {
       persist.setPersist(res)
       router.push({name: 'Home'})
-    }).then(() => {
-    }).catch(error => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
     })
-}
-
-
-const signOutFromAcc = () => {
-  signOut(auth).then(() => {
-    persist.setPersist({})
-    console.log('Signed out')
-  }).catch(error => {
-    console.warn(error)
-  })
+    // .then(result => {
+    //   const credential = GoogleAuthProvider.credentialFromResult(result)
+    //   const token = credential?.accessToken
+    //   const user = result.user
+    //   userStore.setUser(user)
+    //   persist.setPersist(res)
+    //   router.push({name: 'Home'})
+    // }).then(() => {
+    // }).catch(error => {
+    //   // Handle Errors here.
+    //   const errorCode = error.code;
+    //   const errorMessage = error.message;
+    //   // The email of the user's account used.
+    //   const email = error.customData.email;
+    //   // The AuthCredential type that was used.
+    //   const credential = GoogleAuthProvider.credentialFromError(error);
+    // })
 }
 
 onBeforeMount(() => {
