@@ -21,10 +21,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useFirestore, useCurrentUser } from 'vuefire';
+import { useCurrentUser } from 'vuefire';
 import ListCard from '@/components/card/ListCard.vue'
 import Loader from '@/components/card/Loader.vue';
-import { collection, deleteDoc, doc, getFirestore, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc } from 'firebase/firestore';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@/store/app';
 import { useListsStore } from '@/store/lists';
@@ -57,7 +57,6 @@ const addList = () => {
 }
 
 const user = useCurrentUser()
-// const db = getFirestore()
 const router = useRouter()
 const openList = (obj: any) => {
   if (!Object.keys(obj).length) {

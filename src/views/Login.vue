@@ -23,7 +23,7 @@ import { useUserStore } from '@/store/user';
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { useFirebaseAuth, useFirestore } from 'vuefire';
 import { doc, setDoc } from 'firebase/firestore';
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signInWithRedirect, getAuth, getRedirectResult } from "firebase/auth";
 import { useRouter } from 'vue-router';
 import { usePersist } from '@/store/persist';
 
@@ -31,7 +31,7 @@ const store = useAppStore()
 
 const userStore = useUserStore()
 
-const auth = useFirebaseAuth()!
+const auth = getAuth()
 const provider = new GoogleAuthProvider()
 const router = useRouter()
 
@@ -60,10 +60,34 @@ onMounted(() => {
 const fire = useFirestore()
 
 const signInWithGoogle = async () => {
+  // signInWithRedirect(auth, provider)
+
+  // getRedirectResult(auth)
+  //   .then(result => {
+  //     const user = result!.user
+  //     setDoc(doc(fire, 'users', user!.uid), {
+  //       name: user!.displayName,
+  //       email: user!.email,
+  //       photo: user!.photoURL,
+  //     })
+  //     userStore.setUser({
+  //       id: user.uid,
+  //       name: user.displayName,
+  //       email: user.email,
+  //       photo: user.photoURL,
+  //     })
+  //     localStorage['currentUser'] = JSON.stringify({
+  //       id: user.uid,
+  //       name: user.displayName,
+  //       email: user.email,
+  //       photo: user.photoURL,
+  //     })
+  //     persist.setPersist(res)
+  //     router.push({ name: 'Home' })
+  //   })
   signInWithPopup(auth, provider)
     .then(result => {
-      const credential = GoogleAuthProvider.credentialFromResult(result)
-      const token = credential?.accessToken
+      GoogleAuthProvider.credentialFromResult(result)
       const user = result.user
       setDoc(doc(fire, 'users', user.uid), {
         name: user.displayName,
@@ -84,16 +108,12 @@ const signInWithGoogle = async () => {
       })
       persist.setPersist(res)
       router.push({ name: 'Home' })
-    }).then(() => {
     }).catch(error => {
-      // Handle Errors here.
       const errorCode = error.code;
-      console.log(errorCode)
       const errorMessage = error.message;
-      // The email of the user's account used.
-      // const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
+      console.log(errorCode)
+      console.log(errorMessage)
+      GoogleAuthProvider.credentialFromError(error);
     })
 }
 
