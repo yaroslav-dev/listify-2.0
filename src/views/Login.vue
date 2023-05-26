@@ -21,7 +21,6 @@ import TextField from '@/components/loginForm/TextField.vue';
 import { useAppStore } from '@/store/app';
 import { useUserStore } from '@/store/user';
 import { onBeforeMount, onMounted, ref } from 'vue';
-import { useFirebaseAuth, useFirestore } from 'vuefire';
 import { doc, setDoc } from 'firebase/firestore';
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signInWithRedirect, getAuth, getRedirectResult } from "firebase/auth";
 import { db } from '@/firebase'
@@ -31,12 +30,12 @@ import { usePersist } from '@/store/persist';
 const store = useAppStore()
 
 const userStore = useUserStore()
+const persist = usePersist()
 
 const auth = getAuth()
 const provider = new GoogleAuthProvider()
 const router = useRouter()
 
-const persist = usePersist()
 
 const email = ref('')
 const password = ref('')
@@ -63,38 +62,7 @@ onMounted(() => {
 const signInWithGoogle = async () => {
   signInWithRedirect(auth, provider)
 
-  getRedirectResult(auth)
-    .then((result) => {
-      console.log('lol signed in')
-      GoogleAuthProvider.credentialFromResult(result!)
-      const user = result!.user
-      setDoc(doc(db, 'users', user!.uid), {
-        name: user!.displayName,
-        email: user!.email,
-        photo: user!.photoURL,
-      })
-      userStore.setUser({
-        id: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      })
-      localStorage['currentUser'] = JSON.stringify({
-        id: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      })
-      persist.setPersist(res)
-      router.push({ name: 'Home' })
-    })
-    .then((res) => {
-      console.log('lol',res)
-    })
-    .catch((error) => {
-      GoogleAuthProvider.credentialFromError(error);
-    });
-
+  
   // signInWithPopup(auth, provider)
   //   .then(result => {
   //     GoogleAuthProvider.credentialFromResult(result)
@@ -126,6 +94,38 @@ const signInWithGoogle = async () => {
   //     GoogleAuthProvider.credentialFromError(error);
   //   })
 }
+getRedirectResult(auth)
+    .then((result) => {
+      console.log('lol signed in')
+      GoogleAuthProvider.credentialFromResult(result!)
+      const user = result!.user
+      setDoc(doc(db, 'users', user!.uid), {
+        name: user!.displayName,
+        email: user!.email,
+        photo: user!.photoURL,
+      })
+      userStore.setUser({
+        id: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+      localStorage['currentUser'] = JSON.stringify({
+        id: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+      persist.setPersist(res)
+      router.push({ name: 'Home' })
+    })
+    .then((res) => {
+      console.log('lol',res)
+    })
+    .catch((error) => {
+      GoogleAuthProvider.credentialFromError(error);
+    });
+
 
 const signIn = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)

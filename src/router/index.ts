@@ -53,7 +53,8 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
+
   const persist = usePersist()
 
   let db
