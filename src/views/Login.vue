@@ -22,7 +22,7 @@ import { useAppStore } from '@/store/app';
 import { useUserStore } from '@/store/user';
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { doc, setDoc } from 'firebase/firestore';
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signInWithRedirect, getAuth, getRedirectResult } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signInWithRedirect, getAuth, getRedirectResult, onAuthStateChanged } from "firebase/auth";
 import { db } from '@/firebase'
 import { useRouter } from 'vue-router';
 import { usePersist } from '@/store/persist';
@@ -97,7 +97,8 @@ const signInWithGoogle = async () => {
 getRedirectResult(auth)
     .then((result) => {
       console.log('lol signed in')
-      GoogleAuthProvider.credentialFromResult(result!)
+      const credential = GoogleAuthProvider.credentialFromResult(result!);
+      const token = credential!.accessToken;
       const user = result!.user
       setDoc(doc(db, 'users', user!.uid), {
         name: user!.displayName,
@@ -116,8 +117,12 @@ getRedirectResult(auth)
         email: user.email,
         photo: user.photoURL,
       })
-      persist.setPersist(res)
-      router.push({ name: 'Home' })
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          persist.setPersist(user)
+          router.push({ name: 'Home' })
+        }
+      })
     })
     .then((res) => {
       console.log('lol',res)

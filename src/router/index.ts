@@ -1,6 +1,7 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
 import DefaultVue from '@/layouts/default/Default.vue'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { usePersist } from '@/store/persist'
 
 const routes = [
@@ -53,31 +54,41 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach(async (to) => {
+// const auth = getAuth()
+router.beforeEach( (to) => {
+  // onAuthStateChanged(auth, (user) => {
+  //   if (!user && (to.name != 'Login')) {
+  //     router.push({name: 'Login'})
+  //   } else if (!user && to.name != 'Registration') {
+  //     router.push({name: 'Registration'})
+  //   } else if (user && to.name == 'Login') {
+  //     router.push({name: 'Home'})
+  //   }
+  // })
 
-  const persist = usePersist()
+  // const persist = usePersist()
 
-  let db
-  let transaction
-  let storage: any
-  let res: any
+  // let db
+  // let transaction
+  // let storage: any
+  // let res: any
 
-  const openRequest = indexedDB.open('firebaseLocalStorageDb')
-  openRequest.onsuccess = () => {
-    db = openRequest.result
-    transaction = db.transaction('firebaseLocalStorage')
-    storage = transaction.objectStore('firebaseLocalStorage').getAll()
-    storage.onsuccess = async () => {
-      res = await storage.result.find((index: any) => index.value !== '1')
-      persist.setPersist(res)
-      if (!res && (to.name != 'Login' , to.name != 'Registration')) {
-        router.push({name: 'Login'})
-      }
-      if (res && to.name == 'Login') {
-        router.push({name: 'Home'})
-      }
-    }
-  }
+  // const openRequest = indexedDB.open('firebaseLocalStorageDb')
+  // openRequest.onsuccess = () => {
+  //   db = openRequest.result
+  //   transaction = db.transaction('firebaseLocalStorage')
+  //   storage = transaction.objectStore('firebaseLocalStorage').getAll()
+  //   storage.onsuccess = async () => {
+  //     res = await storage.result.find((index: any) => index.value !== '1')
+  //     persist.setPersist(res)
+  //     if (!res && (to.name != 'Login' , to.name != 'Registration')) {
+  //       router.push({name: 'Login'})
+  //     }
+  //     if (res && to.name == 'Login') {
+  //       router.push({name: 'Home'})
+  //     }
+  //   }
+  // }
 })
 
 export default router
