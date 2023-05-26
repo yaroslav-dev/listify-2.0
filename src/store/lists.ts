@@ -1,15 +1,31 @@
 import { defineStore } from "pinia";
-import { useCollection, useFirestore } from 'vuefire';
-import { collection, doc } from 'firebase/firestore';
 import { ref } from "vue";
+import { useFirestore } from '@vueuse/firebase/useFirestore'
+import { collection, doc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { db } from "@/firebase";
 
-const db = useFirestore()
+const auth = getAuth()
 
 export const useListsStore = defineStore('lists', () => {
+    
+    const lists = ref()
 
-    const lists = useCollection(collection(doc(collection(db, 'users'), 'sP3bh4BhXPkSaCFNZdC2'), 'lists'))
+    const getLists = () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          lists.value = useFirestore(collection(doc(db, 'users', user.uid), 'lists'))
+        } else {
+          lists.value = []
+        }
+      })
+    }
 
-    const currentList = ref(<any>{})
+    const setLists = (value: any) => {
+      lists.value = value
+    }
+
+    const currentList = ref({}) as any
 
     const addItem = (newTitle: any) => {
       currentList.value.items.push({
@@ -20,7 +36,7 @@ export const useListsStore = defineStore('lists', () => {
     }
 
     return {
-      lists, currentList, addItem
+      lists, currentList, addItem, setLists, getLists
     }
   },
 )

@@ -1,51 +1,88 @@
 <template>
   <v-container>
     <v-responsive>
-      <div v-if="loading" class="loader-container">
-        <v-progress-circular color="primary" size="60" indeterminate></v-progress-circular>
-      </div>
-      <ListCard v-else v-for="(list, index) in lists" :list="list" :key="index" @click="openList(list)" />
+      <Loader v-if="!lists && !listsLength" />
+      <template v-if="lists && listsLength">
+        <ListCard v-for="(list, index) in lists.value" :list="list" :key="index" @click="openList(list)" @delete-list="deleteList(list.id)" />
+      </template>
+      <v-alert v-if="lists && !listsLength && delayedShow" border="start">
+        No data.
+      </v-alert>
     </v-responsive>
+    <v-app-bar color="transparent" order="1" location="bottom" density="compact" flat floating>
+      <v-btn color="primary" class="fab" prepend-icon="add" @click="addList">
+        new list
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" icon="filter_list" density="comfortable">
+      </v-btn>
+    </v-app-bar>
   </v-container>
 </template>
 
 <script lang="ts" setup>
+import { useFirestore, useCurrentUser } from 'vuefire';
 import ListCard from '@/components/card/ListCard.vue'
+import Loader from '@/components/card/Loader.vue';
+import { collection, deleteDoc, doc, getFirestore, setDoc } from 'firebase/firestore';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@/store/app';
 import { useListsStore } from '@/store/lists';
-import { onMounted } from 'vue';
-import { computed } from 'vue';
-
-const store = useAppStore()
-onMounted(() => {
-  store.setTitle('Lists')
-})
+import { onBeforeMount, onMounted, computed, ref, watch } from 'vue';
+import { db } from '@/firebase'
 
 const listsStore = useListsStore()
+const listsLength = ref(listsStore.lists?.value?.length || 0)
 const lists = computed(() => {
   return listsStore.lists
 })
+const delayedShow = ref(false)
+watch(listsStore, () => {
+  listsLength.value = listsStore.lists?.value?.length
+  setTimeout(() => {
+    delayedShow.value = true
+  }, 1000);
+})
 
-let loading = computed(() => lists.value.length ? false : true)
+const store = useAppStore()
+onBeforeMount(() => {
+  listsStore.getLists()
+  store.hideNavBar(false)
+})
+onMounted(() => {
+  store.setTitle('Lists')
+})
+const addList = () => {
+  openList({})
+}
 
+const user = useCurrentUser()
+// const db = getFirestore()
 const router = useRouter()
 const openList = (obj: any) => {
-  store.hideNavBar(true)
-  listsStore.currentList = obj
-  router.push({
-    path: `/list/${obj.id}`,
-    name: 'List',
-  })
+  if (!Object.keys(obj).length) {
+    store.hideNavBar(true)
+    let newList = {
+      id: Date.now(),
+      items: [],
+      title: 'New list',
+    }
+    listsStore.currentList = newList
+    router.push({
+      path: `/list/${newList.id}`,
+      name: 'List',
+    })
+  } else {
+    store.hideNavBar(true)
+    listsStore.currentList = obj
+    router.push({
+      path: `/list/${obj.id}`,
+      name: 'List',
+    })
+  }
+}
+
+const deleteList = async (id: number) => {
+  await deleteDoc(doc(collection(doc(collection(db, 'users'), user.value?.uid), 'lists'), `${id}`))
 }
 </script>
-
-<style scoped>
-.loader-container {
-  width: 100%;
-  height: calc(100vh - (64px + 56px + 32px));
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

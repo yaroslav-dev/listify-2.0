@@ -1,5 +1,5 @@
 <template>
-  <v-main class="d-flex flex-column ">
+  <v-main class="d-flex flex-column" >
     <router-view v-slot="{ Component }">
       <transition name="lol" mode="out-in">
         <component :is="Component" />

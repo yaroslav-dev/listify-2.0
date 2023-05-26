@@ -19,6 +19,11 @@ const routes = [
         component: () => import('@/views/Login.vue'),
       },
       {
+        path: '/signup',
+        name: 'Registration',
+        component: () => import('@/views/Register.vue'),
+      },
+      {
         path: '/timer',
         name: 'Timer',
         component: () => import('@/views/Timer.vue')
@@ -48,7 +53,7 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach(async (to) => {
+router.beforeEach((to) => {
   const persist = usePersist()
 
   let db
@@ -61,11 +66,14 @@ router.beforeEach(async (to) => {
     db = openRequest.result
     transaction = db.transaction('firebaseLocalStorage')
     storage = transaction.objectStore('firebaseLocalStorage').getAll()
-    storage.onsuccess = () => {
-      res = storage.result.find((index: any) => index.value !== '1')
+    storage.onsuccess = async () => {
+      res = await storage.result.find((index: any) => index.value !== '1')
       persist.setPersist(res)
-      if (!res && to.name !== 'Login') {
+      if (!res && (to.name != 'Login' , to.name != 'Registration')) {
         router.push({name: 'Login'})
+      }
+      if (res && to.name == 'Login') {
+        router.push({name: 'Home'})
       }
     }
   }

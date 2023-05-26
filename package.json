@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "@vueuse/core": "^10.1.2",
+    "@vueuse/firebase": "^10.1.2",
     "core-js": "^3.8.3",
     "firebase": "^9.19.1",
     "pinia": "^2.0.23",

@@ -7,15 +7,15 @@
         {{ completed }}/{{ list.items.length }}</span>
     </v-card-title>
     <v-card-actions class="px-0 py-0">
-      <v-menu bottom left close-on-click close-on-content-click>
+      <v-menu bottom left close-on-click>
         <template v-slot:activator="{ props }">
           <v-btn icon v-bind="props">
             <v-icon icon="more_vert"></v-icon>
           </v-btn>
         </template>
         <v-list>
-          <v-list-item>
-            <v-list-item-title class="delete">Delete</v-list-item-title>
+          <v-list-item @click="deleteList()">
+            <v-list-item-title>Delete</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -24,6 +24,7 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue';
+const emit = defineEmits(['delete-list'])
 
 const props = defineProps(['list'])
 
@@ -31,5 +32,8 @@ const completed = computed(() => {
   let comp = props.list.items.filter((item: any) => item.completed)
   return comp.length
 })
+
+const deleteList = () => {
+  emit('delete-list', props.list.id)
+}
 </script>
-<style></style>

@@ -1,7 +1,7 @@
 <template>
   <v-container class="container d-flex flex-column justify-space-between">
     <v-responsive v-if="list">
-      <v-text-field density="compact" variant="plain" v-model="listsStore.currentList.title" hide-details></v-text-field>
+      <v-text-field density="compact" bg-color="#f8f6ff" color="primary" v-model="listsStore.currentList.title" hide-details></v-text-field>
       <transition-group>
         <ListItem v-for="(item, index) in list.items" :item="item" :key="index" />
       </transition-group>
@@ -14,26 +14,31 @@
 <script lang="ts" setup>
 import { useAppStore } from '@/store/app';
 import { useListsStore } from '@/store/lists';
-import { onBeforeUnmount, onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
+import { onBeforeUnmount, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import TextField from '@/components/list/TextField.vue';
 import ListItem from '@/components/list/ListItem.vue';
+import { useFirestore } from 'vuefire';
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 const router = useRouter()
 const store = useAppStore()
+const listsStore = useListsStore()
+
+const isCurrentListExists = ref(Object.keys(listsStore.currentList).length)
 
 onBeforeMount(() => {
-  if (!Object.keys(listsStore.currentList).length) {
+  if (!isCurrentListExists.value) {
     router.push('/')
   }
 })
 
-const listsStore = useListsStore()
-
 const list = ref()
 
 onMounted(() => {
-  list.value = listsStore.currentList
+  if (isCurrentListExists.value) {
+    list.value = listsStore.currentList
+  }
 })
 
 onBeforeUnmount(() => {
@@ -44,6 +49,16 @@ onUnmounted(() => {
   store.hideNavBar(false)
 })
 
+const fire = useFirestore()
+const currentUser = JSON.parse(localStorage['currentUser'])
+
+watch(list, () => {
+  console.log('watch')
+  if (isCurrentListExists.value) {
+    setDoc(doc(collection(doc(collection(fire, 'users'), currentUser.id), 'lists'), `${list.value.id}`), list.value)
+  }
+}, {deep: true})
+
 const addItem = (title: string) => {
   listsStore.addItem(title)
 }
@@ -52,8 +67,6 @@ const addItem = (title: string) => {
 .container {
   flex-grow: 1;
 }
-
-/* ми пояснимо, що ці класи роблять далі! */
 .v-enter-active,
 .v-leave-active {
   transition: opacity .3s ease;
