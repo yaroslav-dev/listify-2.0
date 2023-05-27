@@ -20,15 +20,14 @@
 import TextField from '@/components/loginForm/TextField.vue';
 import { useAppStore } from '@/store/app';
 import { useUserStore } from '@/store/user';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { doc, setDoc } from 'firebase/firestore';
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signInWithRedirect, getAuth, getRedirectResult, onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { db } from '@/firebase'
 import { useRouter } from 'vue-router';
 import { usePersist } from '@/store/persist';
 
 const store = useAppStore()
-
 const userStore = useUserStore()
 const persist = usePersist()
 
@@ -36,74 +35,19 @@ const auth = getAuth()
 const provider = new GoogleAuthProvider()
 const router = useRouter()
 
-
 const email = ref('')
 const password = ref('')
 
-let idb
-let transaction
-let storage: any
-let res: any
-
-onMounted(() => {
-  const openRequest = indexedDB.open('firebaseLocalStorageDb')
-  openRequest.onsuccess = () => {
-    idb = openRequest.result
-    transaction = idb.transaction('firebaseLocalStorage')
-    storage = transaction.objectStore('firebaseLocalStorage').getAll()
-    storage.onsuccess = () => {
-      res = storage.result.find((index: any) => index.value !== '1')
-    }
-  }
-})
-
-// const fire = useFirestore()
-
 const signInWithGoogle = async () => {
-  signInWithRedirect(auth, provider)
-
-  
-  // signInWithPopup(auth, provider)
-  //   .then(result => {
-  //     GoogleAuthProvider.credentialFromResult(result)
-  //     const user = result.user
-  //     setDoc(doc(fire, 'users', user.uid), {
-  //       name: user.displayName,
-  //       email: user.email,
-  //       photo: user.photoURL,
-  //     })
-  //     userStore.setUser({
-  //       id: user.uid,
-  //       name: user.displayName,
-  //       email: user.email,
-  //       photo: user.photoURL,
-  //     })
-  //     localStorage['currentUser'] = JSON.stringify({
-  //       id: user.uid,
-  //       name: user.displayName,
-  //       email: user.email,
-  //       photo: user.photoURL,
-  //     })
-  //     persist.setPersist(res)
-  //     router.push({ name: 'Home' })
-  //   }).catch(error => {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     console.log(errorCode)
-  //     console.log(errorMessage)
-  //     GoogleAuthProvider.credentialFromError(error);
-  //   })
-}
-getRedirectResult(auth)
-    .then((result) => {
-      console.log('lol signed in')
-      const credential = GoogleAuthProvider.credentialFromResult(result!);
-      const token = credential!.accessToken;
-      const user = result!.user
-      setDoc(doc(db, 'users', user!.uid), {
-        name: user!.displayName,
-        email: user!.email,
-        photo: user!.photoURL,
+  signInWithPopup(auth, provider)
+    .then(result => {
+      const credential=  GoogleAuthProvider.credentialFromResult(result)
+      const token = credential?.accessToken;
+      const user = result.user
+      setDoc(doc(db, 'users', user.uid), {
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
       })
       userStore.setUser({
         id: user.uid,
@@ -117,20 +61,15 @@ getRedirectResult(auth)
         email: user.email,
         photo: user.photoURL,
       })
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          persist.setPersist(user)
-          router.push({ name: 'Home' })
-        }
-      })
+      persist.setPersist(user)
+      localStorage['userAuth'] = JSON.stringify(user)
+      router.push({ name: 'Home' })
+    }).catch(error => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const credential = GoogleAuthProvider.credentialFromError(error);
     })
-    .then((res) => {
-      console.log('lol',res)
-    })
-    .catch((error) => {
-      GoogleAuthProvider.credentialFromError(error);
-    });
-
+}
 
 const signIn = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)

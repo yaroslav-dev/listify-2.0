@@ -27,7 +27,6 @@ const signOutFromAcc = () => {
   signOut(auth).then(() => {
     delete localStorage['currentUser']
     console.log('Signed out')
-  }).then(() => {
     router.push({name: 'Login'})
   }).catch(error => {
     console.warn(error)
