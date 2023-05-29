@@ -51,22 +51,6 @@ const register = () => {
     })
 }
 
-let db
-let transaction
-let storage: any
-let res: any
-
-onMounted(() => {
-  const openRequest = indexedDB.open('firebaseLocalStorageDb')
-  openRequest.onsuccess = () => {
-    db = openRequest.result
-    transaction = db.transaction('firebaseLocalStorage')
-    storage = transaction.objectStore('firebaseLocalStorage').getAll()
-    storage.onsuccess = () => {
-      res = storage.result.find((index: any) => index.value !== '1')
-    } 
-  }
-})
 const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
     .then(result => {
@@ -74,7 +58,7 @@ const signInWithGoogle = () => {
       const token = credential?.accessToken
       const user = result.user
       userStore.setUser(user)
-      persist.setPersist(res)
+      persist.setPersist(user)
       router.push({ name: 'Home' })
     }).then(() => {
     }).catch(error => {

@@ -68,10 +68,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   if (requiresAuth && !await getCurrentAuth()) {
-    console.log('yes')
     return '/login';
-  } else {
-    console.log('no')
   }
 })
 
