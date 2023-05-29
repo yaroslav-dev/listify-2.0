@@ -20,7 +20,7 @@
 import TextField from '@/components/loginForm/TextField.vue';
 import { useAppStore } from '@/store/app';
 import { useUserStore } from '@/store/user';
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import { doc, setDoc } from 'firebase/firestore';
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult } from "firebase/auth";
 import { db, auth } from '@/firebase'
@@ -41,39 +41,42 @@ const signInWithGoogle = async () => {
   signInWithRedirect(auth, provider)
 }
 
-getRedirectResult(auth).then((result: any) => {
-  console.log('result start')
-  const credential = GoogleAuthProvider.credentialFromResult(result);
-  const token = credential?.accessToken;
-  const user = result!.user!;
-  setDoc(doc(db, 'users', user.uid), {
-    name: user.displayName,
-    email: user.email,
-    photo: user.photoURL,
+onMounted(() => {
+  getRedirectResult(auth).then((result: any) => {
+    console.log('result start')
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential?.accessToken;
+    const user = result!.user!;
+    setDoc(doc(db, 'users', user.uid), {
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+    })
+    console.log('set doc')
+    userStore.setUser({
+      id: user.uid,
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+    })
+    console.log('set user')
+    localStorage['currentUser'] = JSON.stringify({
+      id: user.uid,
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+    })
+    console.log('set localstorage')
+    persist.setPersist(user)
+    console.log('persist')
+    localStorage['userAuth'] = JSON.stringify(user)
+  }).then(() => {
+    router.push({ name: 'Home' })
+  }).catch((error) => {
+    console.log(error.message)
   })
-  console.log('set doc')
-  userStore.setUser({
-    id: user.uid,
-    name: user.displayName,
-    email: user.email,
-    photo: user.photoURL,
-  })
-  console.log('set user')
-  localStorage['currentUser'] = JSON.stringify({
-    id: user.uid,
-    name: user.displayName,
-    email: user.email,
-    photo: user.photoURL,
-  })
-  console.log('set localstorage')
-  persist.setPersist(user)
-  console.log('persist')
-  localStorage['userAuth'] = JSON.stringify(user)
-}).then(() => {
-  router.push({ name: 'Home' })
-}).catch((error) => {
-  console.log(error.message)
 })
+
 
 const signIn = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)
