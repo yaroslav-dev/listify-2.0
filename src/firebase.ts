@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection } from 'firebase/firestore'
+import { getFirestore } from 'firebase/firestore'
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
@@ -18,7 +18,5 @@ export const firebaseApp = initializeApp(firebaseConfig)
 export const analytics = getAnalytics(firebaseApp);
 
 export const db = getFirestore(firebaseApp)
-
-export const usersRef = collection(db, 'users')
 
 export const auth = getAuth(firebaseApp)
