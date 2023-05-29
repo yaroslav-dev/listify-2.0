@@ -30,8 +30,8 @@ import { usePersist } from '@/store/persist';
 const store = useAppStore()
 const userStore = useUserStore()
 const persist = usePersist()
-
 const auth = getAuth()
+
 const provider = new GoogleAuthProvider()
 const router = useRouter()
 
