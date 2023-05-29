@@ -30,7 +30,6 @@ import { usePersist } from '@/store/persist';
 const store = useAppStore()
 const userStore = useUserStore()
 const persist = usePersist()
-const auth = getAuth()
 
 const provider = new GoogleAuthProvider()
 const router = useRouter()
@@ -39,11 +38,16 @@ const email = ref('')
 const password = ref('')
 
 const signInWithGoogle = async () => {
+const auth = getAuth()
   signInWithPopup(auth, provider)
-    .then(result => {
-      const credential=  GoogleAuthProvider.credentialFromResult(result)
+    .then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
-      const user = result.user
+      // The signed-in user info.
+      const user = result.user;
+      // IdP data available using getAdditionalUserInfo(result)
+      // ...
       setDoc(doc(db, 'users', user.uid), {
         name: user.displayName,
         email: user.email,
@@ -64,14 +68,20 @@ const signInWithGoogle = async () => {
       persist.setPersist(user)
       localStorage['userAuth'] = JSON.stringify(user)
       router.push({ name: 'Home' })
-    }).catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const credential = GoogleAuthProvider.credentialFromError(error);
+    }).catch((error) => {
+      // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
     })
 }
 
 const signIn = () => {
+const auth = getAuth()
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then((data) => {
       console.log('Signed in with email')
