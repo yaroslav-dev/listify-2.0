@@ -71,29 +71,30 @@ const signInWithGoogle = async () => {
 }
 
 getRedirectResult(auth).then((result) => {
+  console.log('result')
   const credential = GoogleAuthProvider.credentialFromResult(result!);
     // const token = credential?.accessToken;
     const user = result!.user;
-    setDoc(doc(db, 'users', user.uid), {
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-    })
-    userStore.setUser({
-      id: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-    })
-    localStorage['currentUser'] = JSON.stringify({
-      id: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-    })
-    persist.setPersist(user)
-    localStorage['userAuth'] = JSON.stringify(user)
-    router.push({ name: 'Home' })
+    // setDoc(doc(db, 'users', user.uid), {
+    //   name: user.displayName,
+    //   email: user.email,
+    //   photo: user.photoURL,
+    // })
+    // userStore.setUser({
+    //   id: user.uid,
+    //   name: user.displayName,
+    //   email: user.email,
+    //   photo: user.photoURL,
+    // })
+    // localStorage['currentUser'] = JSON.stringify({
+    //   id: user.uid,
+    //   name: user.displayName,
+    //   email: user.email,
+    //   photo: user.photoURL,
+    // })
+    // persist.setPersist(user)
+    // localStorage['userAuth'] = JSON.stringify(user)
+    // router.push({ name: 'Home' })
 }).catch((error) => {
   console.log(error.message)
 })
