@@ -79,8 +79,7 @@ onMounted(() => {
       email: user.email,
       photo: user.photoURL,
     })
-    persist.setPersist({...user})
-    localStorage['userAuth'] = JSON.stringify(user)
+    persist.setPersist(user)
   }).then(() => {
     router.push({ name: 'Home' })
   }).catch((error) => {
