@@ -56,11 +56,11 @@ const signInWithGoogle = async () => {
 }
 
 onMounted(() => {
-  localStorage['loading'] = false
   getRedirectResult(auth).then((result: any) => {
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential?.accessToken;
-    const user = result!.user!;
+    localStorage['loading'] = false
+    // const credential = GoogleAuthProvider.credentialFromResult(result);
+    // const token = credential?.accessToken;
+    const user = result?.user!;
     setDoc(doc(db, 'users', user.uid), {
       name: user.displayName,
       email: user.email,
@@ -70,8 +70,7 @@ onMounted(() => {
       id: user.uid,
       name: user.displayName,
       email: user.email,
-      photo: user.photoURL,
-      token
+      photo: user.photoURL
     })
     localStorage['currentUser'] = JSON.stringify({
       id: user.uid,
