@@ -14,6 +14,12 @@
       </v-btn>
       <router-link class="mt-3 text-decoration-none" to="/signup">Create account</router-link>
     </v-form>
+    <v-overlay
+      :model-value="loader"
+      class="align-center justify-center"
+    >
+    <v-progress-circular size="70" width="5" color="primary" indeterminate ></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 <script lang="ts" setup>
@@ -26,6 +32,7 @@ import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect, get
 import { db, auth } from '@/firebase'
 import { useRouter } from 'vue-router';
 import { usePersist } from '@/store/persist';
+import { computed } from 'vue';
 
 const store = useAppStore()
 const userStore = useUserStore()
@@ -36,14 +43,21 @@ const router = useRouter()
 const email = ref('')
 const password = ref('')
 
+const localLoading = ref(localStorage['loading'])
+
+const loader = computed(() => {
+  return localLoading.value == 'true' ? true : false
+})
+
 const signInWithGoogle = async () => {
+  localStorage['loading'] = 'true'
   const provider = new GoogleAuthProvider()
   signInWithRedirect(auth, provider)
 }
 
 onMounted(() => {
+  localStorage['loading'] = false
   getRedirectResult(auth).then((result: any) => {
-    console.log('result start')
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential?.accessToken;
     const user = result!.user!;
@@ -52,23 +66,20 @@ onMounted(() => {
       email: user.email,
       photo: user.photoURL,
     })
-    console.log('set doc')
     userStore.setUser({
       id: user.uid,
       name: user.displayName,
       email: user.email,
       photo: user.photoURL,
+      token
     })
-    console.log('set user')
     localStorage['currentUser'] = JSON.stringify({
       id: user.uid,
       name: user.displayName,
       email: user.email,
       photo: user.photoURL,
     })
-    console.log('set localstorage')
-    persist.setPersist(user)
-    console.log('persist')
+    persist.setPersist({...user})
     localStorage['userAuth'] = JSON.stringify(user)
   }).then(() => {
     router.push({ name: 'Home' })
@@ -80,15 +91,16 @@ onMounted(() => {
 
 const signIn = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)
-    .then((data) => {
-      console.log('Signed in with email')
-      console.log('data: ', data)
+    .then(() => {
       router.push({ name: 'Home' })
     })
 }
 
 onBeforeMount(() => {
   store.hideNavBar(true)
+  if (!localStorage['loading']) {
+    localStorage['loading'] = false
+  }
 })
 </script>
 <style scoped>
