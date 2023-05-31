@@ -17,6 +17,9 @@
     <v-overlay
       :model-value="loader"
       class="align-center justify-center"
+      :close-on-content-click="false"
+      :persistent="true"
+      scrim="#fff"
     >
     <v-progress-circular size="70" width="5" color="primary" indeterminate ></v-progress-circular>
     </v-overlay>
