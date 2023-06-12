@@ -11,10 +11,10 @@ export const useListsStore = defineStore('lists', () => {
     
     const lists = ref()
 
-    const getLists = () => {
+    const getLists = async () => {
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          lists.value = useFirestore(collection(doc(db, 'users', user.uid), 'lists'))
+         lists.value = useFirestore(collection(doc(db, 'users', user.uid), 'lists'))
         } else {
           lists.value = []
         }
