@@ -3,7 +3,7 @@
     <v-responsive v-if="list">
       <v-text-field density="compact" bg-color="#f8f6ff" color="primary" v-model="listsStore.currentList.title" hide-details></v-text-field>
       <transition-group>
-        <ListItem v-for="(item, index) in list.items" :item="item" :key="index" />
+        <ListItem v-for="(item, index) in list.items" :item="item" :key="index" @delete-item="deleteItem" />
       </transition-group>
     </v-responsive>
     <v-app-bar class="pt-0 px-3 pb-3" flat color="transparent" location="bottom">
@@ -61,6 +61,10 @@ watch(list, () => {
 
 const addItem = (title: string) => {
   listsStore.addItem(title)
+}
+
+const deleteItem = (id: number) => {
+  console.log(id)
 }
 </script>
 <style scoped>

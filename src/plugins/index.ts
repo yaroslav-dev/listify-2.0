@@ -9,6 +9,7 @@ import { loadFonts } from './webfontloader'
 import vuetify from './vuetify'
 import pinia from '../store'
 import router from '../router'
+// import Vue3TouchEvents from "vue3-touch-events";
 
 // Types
 import type { App } from 'vue'
@@ -19,4 +20,7 @@ export function registerPlugins (app: App) {
     .use(pinia)
     .use(vuetify)
     .use(router)
+    // .use(Vue3TouchEvents, {
+    //   touchHoldTolerance: 400
+    // })
 }

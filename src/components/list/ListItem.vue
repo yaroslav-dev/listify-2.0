@@ -1,5 +1,5 @@
 <template>
-  <v-card class="col-md-6 my-2 d-flex align-center" :color="itemColor" elevation="0" density="compact">
+  <v-card class="col-md-6 my-2 d-flex align-center" :color="itemColor" elevation="0" density="compact" v-touch:hold="removeItem">
     <v-card-actions>
       <v-checkbox v-model="listItem.completed" :ripple="false" color="primary" density="compact" hide-details></v-checkbox>
     </v-card-actions>
@@ -14,9 +14,17 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
+const emit = defineEmits(['delete-item'])
+
 const props = defineProps(['item'])
 
 const listItem = computed(() => props.item)
 
 const itemColor = ref('#f8f6ff')
+
+const removeItem = () => {
+  console.log('lols')
+  alert('It`s working!')
+  emit('delete-item', listItem.value.id)
+}
 </script>

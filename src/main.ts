@@ -12,6 +12,7 @@ import { createApp } from 'vue'
 
 // Plugins
 import { registerPlugins } from '@/plugins'
+import Vue3TouchEvents from "vue3-touch-events";
 
 // Import the functions you need from the SDKs you need
 import { firebaseApp } from './firebase'
@@ -27,6 +28,8 @@ app.use(VueFire, {
     VueFireAuth(),
   ],
 })
+
+app.use(Vue3TouchEvents)
 
 registerPlugins(app)
 

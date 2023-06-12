@@ -35,8 +35,12 @@ export const useListsStore = defineStore('lists', () => {
       })
     }
 
+    const deleteItem = (id: number) => {
+      currentList.value.items.filter((item: any) => item.id != id)
+    }
+
     return {
-      lists, currentList, addItem, setLists, getLists
+      lists, currentList, addItem, setLists, getLists, deleteItem
     }
   },
 )
