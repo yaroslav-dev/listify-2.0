@@ -1,16 +1,16 @@
 <template>
   <v-container>
     <v-responsive>
-      <Loader v-if="!lists && !listsLength" />
-      <template v-if="lists && listsLength">
+      <Loader v-if="lists && !listsLength && !delayedShow" />
+      <template v-else-if="lists && listsLength">
         <ListCard v-for="(list, index) in lists.value" :list="list" :key="index" @click="openList(list)" @delete-list="deleteList(list.id)" />
       </template>
-      <v-alert v-if="lists && !listsLength && delayedShow" border="start">
+      <v-alert v-else-if="!lists && !listsLength && delayedShow" border="start">
         No data.
       </v-alert>
     </v-responsive>
-    <v-app-bar color="transparent" order="1" location="bottom" density="compact" flat floating>
-      <v-btn color="primary" class="fab" prepend-icon="add" @click="addList">
+    <v-app-bar color="rgba(255,255,255,0.95)" order="1" location="bottom" density="compact" flat floating>
+      <v-btn color="primary" prepend-icon="add" @click="addList">
         new list
       </v-btn>
       <v-spacer></v-spacer>
@@ -32,7 +32,7 @@ import { onBeforeMount, onMounted, computed, ref, watch } from 'vue';
 import { db } from '@/firebase'
 
 const listsStore = useListsStore()
-const listsLength = ref(listsStore.lists?.value?.length || 0)
+const listsLength = ref(0)
 const lists = computed(() => {
   return listsStore.lists
 })
@@ -46,10 +46,10 @@ watch(listsStore, () => {
 
 const store = useAppStore()
 onBeforeMount(() => {
-  listsStore.getLists()
   store.hideNavBar(false)
 })
 onMounted(() => {
+  listsStore.getLists()
   store.setTitle('Lists')
 })
 const addList = () => {
