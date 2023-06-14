@@ -27,16 +27,17 @@ export const useListsStore = defineStore('lists', () => {
 
     const currentList = ref({}) as any
 
-    const addItem = (newTitle: any) => {
+    const addItem = (newTitle: any, color: string) => {
       currentList.value.items.push({
         title: newTitle,
         id: Date.now(),
-        completed: false
+        completed: false,
+        color
       })
     }
 
     const deleteItem = (id: number) => {
-      currentList.value.items.filter((item: any) => item.id != id)
+      currentList.value.items = currentList.value.items.filter((item: any) => item.id != id)
     }
 
     return {

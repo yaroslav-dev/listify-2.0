@@ -3,9 +3,9 @@
     <v-responsive>
       <Loader v-if="lists && !listsLength && !delayedShow" />
       <template v-else-if="lists && listsLength">
-        <ListCard v-for="(list, index) in lists.value" :list="list" :key="index" @click="openList(list)" @delete-list="deleteList(list.id)" />
+        <ListCard v-for="(list, index) in lists.value" :list="list" :key="index" :ripple="false" @click="openList(list)" @delete-list="deleteList(list.id)" />
       </template>
-      <v-alert v-else-if="!lists && !listsLength && delayedShow" border="start">
+      <v-alert v-else border="start">
         No data.
       </v-alert>
     </v-responsive>

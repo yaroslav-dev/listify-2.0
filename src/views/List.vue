@@ -21,6 +21,8 @@ import ListItem from '@/components/list/ListItem.vue';
 import { useFirestore } from 'vuefire';
 import { collection, doc, setDoc } from 'firebase/firestore';
 
+const itemColor = ref('#f8f6ff')
+
 const router = useRouter()
 const store = useAppStore()
 const listsStore = useListsStore()
@@ -53,18 +55,17 @@ const fire = useFirestore()
 const currentUser = JSON.parse(localStorage['currentUser'])
 
 watch(list, () => {
-  console.log('watch')
   if (isCurrentListExists.value) {
     setDoc(doc(collection(doc(collection(fire, 'users'), currentUser.id), 'lists'), `${list.value.id}`), list.value)
   }
 }, {deep: true})
 
 const addItem = (title: string) => {
-  listsStore.addItem(title)
+  listsStore.addItem(title, itemColor.value)
 }
 
 const deleteItem = (id: number) => {
-  console.log(id)
+  listsStore.deleteItem(id)
 }
 </script>
 <style scoped>
