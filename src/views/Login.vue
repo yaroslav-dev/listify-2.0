@@ -90,7 +90,7 @@ onMounted(async () => {
       console.log('Error: Something went wrong')
     }
   } catch (error) {
-    console.log(error)
+    alert(error)
   }
 })
 
