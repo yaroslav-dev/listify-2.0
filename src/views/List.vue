@@ -1,7 +1,7 @@
 <template>
   <v-container class="container d-flex flex-column justify-space-between">
     <v-responsive v-if="list">
-      <v-text-field density="compact" bg-color="#f8f6ff" color="primary" v-model="listsStore.currentList.title" hide-details></v-text-field>
+      <v-text-field density="compact" bg-color="#fff" color="primary" v-model="listsStore.currentList.title" hide-details></v-text-field>
       <transition-group>
         <ListItem v-for="(item, index) in list.items" :item="item" :key="index" @delete-item="deleteItem" />
       </transition-group>

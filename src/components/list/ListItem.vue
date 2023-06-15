@@ -20,7 +20,7 @@
         </v-toolbar>
         <v-form class="ma-4">
           <div class="text-h6">Title</div>
-          <v-text-field bg-color="#f8f6ff" color="primary" density="compact" v-model="tempTitle"></v-text-field>
+          <v-text-field bg-color="#fff" color="primary" density="compact" v-model="tempTitle"></v-text-field>
           <div class="text-h6">Background color</div>
           <v-color-picker class="mx-auto" v-model="tempColor" hide-canvas hide-inputs hide-sliders show-swatches :swatches="swatches" elevation="0"></v-color-picker>
           <div class="d-flex mt-4">
