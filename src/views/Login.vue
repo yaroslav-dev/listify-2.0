@@ -60,58 +60,38 @@ const signInWithGoogle = async () => {
 
 onMounted(async () => {
   const result = await getRedirectResult(auth)
-  if (result) {
-    localStorage['loading'] = false
-    const user = result.user
-    setDoc(doc(db, 'users', user.uid), {
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-    })
-    userStore.setUser({
-      id: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL
-    })
-    localStorage['currentUser'] = JSON.stringify({
-      id: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-    })
-    persist.setPersist(user)
-    router.push({ name: 'Home' })
+  try {
+    if (result) {
+      console.log(result)
+      localStorage['loading'] = false
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken;
+      const user = result.user
+      setDoc(doc(db, 'users', user.uid), {
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+      userStore.setUser({
+        id: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL
+      })
+      localStorage['currentUser'] = JSON.stringify({
+        id: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+      persist.setPersist(user)
+      router.push({ name: 'Home' })
+    } else {
+      console.log('Error: Something went wrong')
+    }
+  } catch (error) {
+    console.log(error)
   }
-
-  // getRedirectResult(auth).then((result: any) => {
-  //   localStorage['loading'] = false
-  //   // const credential = GoogleAuthProvider.credentialFromResult(result);
-  //   // const token = credential?.accessToken;
-  //   const user = result?.user!;
-  //   setDoc(doc(db, 'users', user.uid), {
-  //     name: user.displayName,
-  //     email: user.email,
-  //     photo: user.photoURL,
-  //   })
-  //   userStore.setUser({
-  //     id: user.uid,
-  //     name: user.displayName,
-  //     email: user.email,
-  //     photo: user.photoURL
-  //   })
-  //   localStorage['currentUser'] = JSON.stringify({
-  //     id: user.uid,
-  //     name: user.displayName,
-  //     email: user.email,
-  //     photo: user.photoURL,
-  //   })
-  //   persist.setPersist(user)
-  // }).then(() => {
-  //   router.push({ name: 'Home' })
-  // }).catch((error) => {
-  //   console.log(error.message)
-  // })
 })
 
 
