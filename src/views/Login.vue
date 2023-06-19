@@ -65,10 +65,6 @@ const signInWithGoogle = async () => {
   localStorage['loading'] = 'true'
   const provider = new GoogleAuthProvider()
   await signInWithRedirect(auth, provider)
-}
-
-onMounted(async () => {
-  // maybe without async?
   try {
     const result = await getRedirectResult(auth)
     if (result) {
@@ -92,14 +88,47 @@ onMounted(async () => {
       router.push({ name: 'Home' })
     } else {
       console.log('Error: Something went wrong.')
-      authError(5000)
+      authError(1000)
     }
   } catch (error) {
     alert(error)
-    authError(5000)
+    authError(1000)
   }
-  authError(10000)
-})
+}
+
+// onMounted(async () => {
+//   // maybe without async?
+//   try {
+//     const result = await getRedirectResult(auth)
+//     if (result) {
+//       console.log(result)
+//       localStorage['loading'] = false
+//       const credential = GoogleAuthProvider.credentialFromResult(result);
+//       const token = credential?.accessToken;
+//       const user = result.user
+//       setDoc(doc(db, 'users', user.uid), {
+//         name: user.displayName,
+//         email: user.email,
+//         photo: user.photoURL,
+//       })
+//       localStorage['currentUser'] = JSON.stringify({
+//         id: user.uid,
+//         name: user.displayName,
+//         email: user.email,
+//         photo: user.photoURL,
+//         accessToken: token
+//       })
+//       router.push({ name: 'Home' })
+//     } else {
+//       console.log('Error: Something went wrong.')
+//       authError(1000)
+//     }
+//   } catch (error) {
+//     alert(error)
+//     authError(1000)
+//   }
+//   authError(10000)
+// })
 
 
 const signIn = () => {
