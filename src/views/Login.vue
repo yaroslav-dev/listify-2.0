@@ -31,8 +31,8 @@ import TextField from '@/components/loginForm/TextField.vue';
 import { useAppStore } from '@/store/app';
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { doc, setDoc } from 'firebase/firestore';
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult } from "firebase/auth";
-import { db, auth } from '@/firebase'
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult, getAuth } from "firebase/auth";
+import { db } from '@/firebase'
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
 
@@ -62,47 +62,79 @@ const authError = (timeout: number) => {
 }
 
 const signInWithGoogle = async () => {
+  const auth = getAuth()
   localStorage['loading'] = 'true'
   const provider = new GoogleAuthProvider()
   signInWithRedirect(auth, provider)
 }
 
-onMounted(async () => {
-  // maybe without async?
-  const result = await getRedirectResult(auth)
-  try {
-    if (result) {
-      console.log(result)
-      localStorage['loading'] = false
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
-      const user = result.user
-      setDoc(doc(db, 'users', user.uid), {
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      })
-      localStorage['currentUser'] = JSON.stringify({
-        id: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-        accessToken: token
-      })
-      router.push({ name: 'Home' })
-    } else {
-      console.log('Error: Something went wrong.')
-      authError(5000)
-    }
-  } catch (error) {
-    alert(error)
+onMounted(() => {
+  const auth = getAuth()
+  getRedirectResult(auth)
+  .then((result: any) => {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential?.accessToken;
+    const user = result.user;
+    localStorage['loading'] = false
+    setDoc(doc(db, 'users', user.uid), {
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+    })
+    localStorage['currentUser'] = JSON.stringify({
+      id: user.uid,
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+      accessToken: token
+    })
+    router.push({ name: 'Home' })
+  }).catch((error) => {
     authError(5000)
-  }
-  authError(10000)
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    console.log(error)
+    console.log('Code: ',errorCode)
+    console.log('Message', errorMessage)
+    console.log('Credential', credential)
+  });
+
+  // const result = await getRedirectResult(auth)
+  // try {s
+  //   if (result) {
+  //     console.log(result)
+  //     localStorage['loading'] = false
+  //     const credential = GoogleAuthProvider.credentialFromResult(result);
+  //     const token = credential?.accessToken;
+  //     const user = result.user
+  //     setDoc(doc(db, 'users', user.uid), {
+  //       name: user.displayName,
+  //       email: user.email,
+  //       photo: user.photoURL,
+  //     })
+  //     localStorage['currentUser'] = JSON.stringify({
+  //       id: user.uid,
+  //       name: user.displayName,
+  //       email: user.email,
+  //       photo: user.photoURL,
+  //       accessToken: token
+  //     })
+  //     router.push({ name: 'Home' })
+  //   } else {
+  //     console.log('Error: Something went wrong.')
+  //     authError(5000)
+  //   }
+  // } catch (error) {
+  //   alert(error)
+  //   authError(5000)
+  // }
+  // authError(10000)
 })
 
 
 const signIn = () => {
+  const auth = getAuth()
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
       router.push({ name: 'Home' })
