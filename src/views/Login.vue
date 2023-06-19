@@ -23,6 +23,7 @@
     >
     <v-progress-circular size="70" width="5" color="primary" indeterminate ></v-progress-circular>
     </v-overlay>
+    <v-snackbar v-model="errorAlert" color="red-darken-1">Something went wrong</v-snackbar>
   </v-container>
 </template>
 <script lang="ts" setup>
@@ -48,9 +49,20 @@ const password = ref('')
 
 const localLoading = ref(localStorage['loading'])
 
+const errorAlert = ref(false)
+
 const loader = computed(() => {
   return localLoading.value == 'true' ? true : false
 })
+
+const authError = () => {
+  setTimeout(() => {
+    if (loader.value) {
+      localStorage['loading'] = false
+      errorAlert.value = true
+    }
+  }, 10000)
+}
 
 const signInWithGoogle = async () => {
   localStorage['loading'] = 'true'
@@ -59,6 +71,7 @@ const signInWithGoogle = async () => {
 }
 
 onMounted(async () => {
+  // maybe without async?
   const result = await getRedirectResult(auth)
   try {
     if (result) {
@@ -83,15 +96,19 @@ onMounted(async () => {
         name: user.displayName,
         email: user.email,
         photo: user.photoURL,
+        accessToken: token
       })
       persist.setPersist(user)
       router.push({ name: 'Home' })
     } else {
-      console.log('Error: Something went wrong')
+      console.log('Error: Something went wrong.')
+      authError()
     }
   } catch (error) {
     alert(error)
+    authError()
   }
+  authError()
 })
 
 
