@@ -55,6 +55,7 @@ const authError = () => {
   setTimeout(() => {
     if (loader.value) {
       localStorage['loading'] = false
+      localLoading.value = 'false'
       errorAlert.value = true
     }
   }, 10000)
