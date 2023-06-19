@@ -51,26 +51,26 @@ const loader = computed(() => {
   return localLoading.value == 'true' ? true : false
 })
 
-const authError = () => {
+const authError = (timeout: number) => {
   setTimeout(() => {
     if (loader.value) {
       localStorage['loading'] = false
       localLoading.value = 'false'
       errorAlert.value = true
     }
-  }, 10000)
+  }, timeout)
 }
 
 const signInWithGoogle = async () => {
   localStorage['loading'] = 'true'
   const provider = new GoogleAuthProvider()
-  signInWithRedirect(auth, provider)
+  await signInWithRedirect(auth, provider)
 }
 
 onMounted(async () => {
   // maybe without async?
-  const result = await getRedirectResult(auth)
   try {
+    const result = await getRedirectResult(auth)
     if (result) {
       console.log(result)
       localStorage['loading'] = false
@@ -92,13 +92,13 @@ onMounted(async () => {
       router.push({ name: 'Home' })
     } else {
       console.log('Error: Something went wrong.')
-      authError()
+      authError(5000)
     }
   } catch (error) {
     alert(error)
-    authError()
+    authError(5000)
   }
-  authError()
+  authError(10000)
 })
 
 
