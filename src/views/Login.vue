@@ -29,18 +29,14 @@
 <script lang="ts" setup>
 import TextField from '@/components/loginForm/TextField.vue';
 import { useAppStore } from '@/store/app';
-import { useUserStore } from '@/store/user';
 import { onBeforeMount, onMounted, ref } from 'vue';
 import { doc, setDoc } from 'firebase/firestore';
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult } from "firebase/auth";
 import { db, auth } from '@/firebase'
 import { useRouter } from 'vue-router';
-import { usePersist } from '@/store/persist';
 import { computed } from 'vue';
 
 const store = useAppStore()
-const userStore = useUserStore()
-const persist = usePersist()
 
 const router = useRouter()
 
@@ -85,12 +81,6 @@ onMounted(async () => {
         email: user.email,
         photo: user.photoURL,
       })
-      userStore.setUser({
-        id: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL
-      })
       localStorage['currentUser'] = JSON.stringify({
         id: user.uid,
         name: user.displayName,
@@ -98,7 +88,6 @@ onMounted(async () => {
         photo: user.photoURL,
         accessToken: token
       })
-      persist.setPersist(user)
       router.push({ name: 'Home' })
     } else {
       console.log('Error: Something went wrong.')
