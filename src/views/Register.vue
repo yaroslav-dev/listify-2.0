@@ -22,18 +22,13 @@ import { ref, onMounted, onBeforeMount } from 'vue';
 import { useFirebaseAuth } from 'vuefire';
 import { GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from 'vue-router';
-import { usePersist } from '@/store/persist';
 import { useAppStore } from '@/store/app';
-import { useUserStore } from '@/store/user';
 
 const store = useAppStore()
 
 const auth = useFirebaseAuth()!
 const provider = new GoogleAuthProvider()
 const router = useRouter()
-const userStore = useUserStore()
-
-const persist = usePersist()
 
 const email = ref('')
 const password = ref('')
@@ -57,8 +52,6 @@ const signInWithGoogle = () => {
       const credential = GoogleAuthProvider.credentialFromResult(result)
       const token = credential?.accessToken
       const user = result.user
-      userStore.setUser(user)
-      persist.setPersist(user)
       router.push({ name: 'Home' })
     }).then(() => {
     }).catch(error => {
