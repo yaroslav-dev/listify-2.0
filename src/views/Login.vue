@@ -23,7 +23,7 @@
     >
     <v-progress-circular size="70" width="5" color="primary" indeterminate ></v-progress-circular>
     </v-overlay>
-    <v-snackbar v-model="errorAlert" color="red-darken-1">Something went wrong</v-snackbar>
+    <v-snackbar v-model="errorAlert" color="red-darken-1">{{errMessage}}</v-snackbar>
   </v-container>
 </template>
 <script lang="ts" setup>
@@ -46,6 +46,7 @@ const password = ref('')
 const localLoading = ref(localStorage['loading'])
 
 const errorAlert = ref(false)
+const errMessage = ref('')
 
 const loader = computed(() => {
   return localLoading.value == 'true' ? true : false
@@ -94,6 +95,7 @@ onMounted(() => {
       authError(5000)
       const errorCode = error.code;
       const errorMessage = error.message;
+      errMessage.value = errorMessage
       const credential = GoogleAuthProvider.credentialFromError(error);
       console.log(error)
       console.log(`
