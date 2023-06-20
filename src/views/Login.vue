@@ -65,6 +65,7 @@ const authError = (timeout: number) => {
 
 const signInWithGoogle = async () => {
   localStorage['loading'] = 'true'
+  localLoading.value = 'true'
   const auth = getAuth()
 
   signInWithPopup(auth, provider)
@@ -73,6 +74,7 @@ const signInWithGoogle = async () => {
       const token = credential?.accessToken;
       const user = result.user;
       localStorage['loading'] = false
+      localLoading.value = 'false'
       setDoc(doc(db, 'users', user.uid), {
         name: user.displayName,
         email: user.email,
