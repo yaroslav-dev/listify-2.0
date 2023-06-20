@@ -48,6 +48,8 @@ const localLoading = ref(localStorage['loading'])
 const errorAlert = ref(false)
 const errMessage = ref('')
 
+const provider = new GoogleAuthProvider()
+
 const loader = computed(() => {
   return localLoading.value == 'true' ? true : false
 })
@@ -65,7 +67,6 @@ const authError = (timeout: number) => {
 const signInWithGoogle = async () => {
   const auth = getAuth()
   localStorage['loading'] = 'true'
-  const provider = new GoogleAuthProvider()
   signInWithRedirect(auth, provider)
 }
 
