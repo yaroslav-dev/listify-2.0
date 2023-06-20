@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDTIda0nsAIldkPNk6vRoL7IPse4L7NVMg",
-  authDomain: "listify-v2.firebaseapp.com",
+  authDomain: "listify-v2.web.app",
   projectId: "listify-v2",
   storageBucket: "listify-v2.appspot.com",
   messagingSenderId: "927463433227",
