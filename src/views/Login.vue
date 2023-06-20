@@ -23,18 +23,17 @@
     >
     <v-progress-circular size="70" width="5" color="primary" indeterminate ></v-progress-circular>
     </v-overlay>
-    <v-snackbar v-model="errorAlert" color="red-darken-1">{{errMessage}}</v-snackbar>
+    <v-snackbar v-model="errorAlert" color="red-darken-1">{{ errMessage }}</v-snackbar>
   </v-container>
 </template>
 <script lang="ts" setup>
 import TextField from '@/components/loginForm/TextField.vue';
 import { useAppStore } from '@/store/app';
-import { nextTick, onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref, computed } from 'vue';
 import { doc, setDoc } from 'firebase/firestore';
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult, getAuth } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, getAuth, signInWithPopup } from "firebase/auth";
 import { db } from '@/firebase'
 import { useRouter } from 'vue-router';
-import { computed } from 'vue';
 
 const store = useAppStore()
 
@@ -65,16 +64,11 @@ const authError = (timeout: number) => {
 }
 
 const signInWithGoogle = async () => {
-  const auth = getAuth()
   localStorage['loading'] = 'true'
-  signInWithRedirect(auth, provider)
-}
+  const auth = getAuth()
 
-onMounted(() => {
-  nextTick(() => {
-    const auth = getAuth()
-    getRedirectResult(auth)
-    .then((result: any) => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const user = result.user;
@@ -105,8 +99,7 @@ onMounted(() => {
         Credential: ${credential}
       `)
     })
-  })
-})
+}
 
 
 const signIn = () => {
