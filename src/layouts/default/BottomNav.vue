@@ -9,11 +9,6 @@
       <v-icon>timer</v-icon>
       <span>Timer</span>
     </v-btn>
-
-    <v-btn @click="navToRoute('Settings')" value="Settings">
-      <v-icon>settings</v-icon>
-      <span>Settings</span>
-    </v-btn>
   </v-bottom-navigation>
 </template>
 <script lang="ts" setup>

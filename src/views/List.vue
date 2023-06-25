@@ -1,7 +1,7 @@
 <template>
   <v-container class="container d-flex flex-column justify-space-between">
     <v-responsive v-if="list">
-      <v-text-field density="compact" bg-color="#fff" color="primary" v-model="listsStore.currentList.title" hide-details></v-text-field>
+      <v-text-field :autofocus="focusIfNewTitle" onfocus="focusIfNewTitle ? this.select() : null" density="compact" bg-color="#fff" color="primary" v-model="listsStore.currentList.title" hide-details></v-text-field>
       <transition-group>
         <ListItem v-for="(item, index) in list.items" :item="item" :key="index" @delete-item="deleteItem" />
       </transition-group>
@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { useAppStore } from '@/store/app';
 import { useListsStore } from '@/store/lists';
-import { onBeforeUnmount, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue';
+import { onBeforeUnmount, onBeforeMount, onMounted, onUnmounted, ref, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import TextField from '@/components/list/TextField.vue';
 import ListItem from '@/components/list/ListItem.vue';
@@ -28,6 +28,10 @@ const store = useAppStore()
 const listsStore = useListsStore()
 
 const isCurrentListExists = ref(Object.keys(listsStore.currentList).length)
+
+const focusIfNewTitle = computed(() => {
+  return listsStore.currentList.title == 'New list'
+})
 
 onBeforeMount(() => {
   if (!isCurrentListExists.value) {

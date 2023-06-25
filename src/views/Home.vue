@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pb-0">
     <v-responsive>
       <Loader v-if="lists && !listsLength && !delayedShow" />
       <template v-else-if="lists && listsLength">
