@@ -3,7 +3,15 @@
     <v-responsive>
       <Loader v-if="lists && !listsLength && !delayedShow" />
       <template v-else-if="lists && listsLength">
-        <ListCard v-for="(list, index) in lists.value" :list="list" :key="index" :ripple="false" @click="openList(list)" @delete-list="deleteList(list.id)" />
+        <draggable
+          class="dragArea list-group w-full"
+          :list="lists.value"
+          handle=".handle"
+          v-bind="dragOptions"
+          @change="log"
+        >
+          <ListCard v-for="(list, index) in lists.value" :list="list" :key="index" :ripple="false" @click="openList(list)" @delete-list="deleteList(list.id)" />
+        </draggable>
       </template>
       <v-alert v-else border="start">
         No data.
@@ -30,6 +38,21 @@ import { useAppStore } from '@/store/app';
 import { useListsStore } from '@/store/lists';
 import { onBeforeMount, onMounted, computed, ref, watch } from 'vue';
 import { db } from '@/firebase'
+import { VueDraggableNext as draggable } from "vue-draggable-next";
+
+const log = (event: any) => {
+  console.log(event);
+};
+
+const dragOptions = computed(() => {
+  return {
+    animation: 200,
+    group: "description",
+    disabled: false,
+    ghostClass: "ghost",
+    delay: 100,
+  };
+});
 
 const listsStore = useListsStore()
 const listsLength = ref(0)
