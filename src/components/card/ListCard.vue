@@ -6,10 +6,10 @@
       <span class="count">
         {{ completed }}/{{ list.items.length }}</span>
     </v-card-title>
-    <v-card-actions class="px-0 py-0">
-      <v-menu bottom left close-on-click>
+    <v-card-actions class="pl-0 py-0">
+      <v-menu bottom left close-on-click v-if="true">
         <template v-slot:activator="{ props }">
-          <v-btn icon v-bind="props">
+          <v-btn icon v-bind="props" class="pr-0">
             <v-icon icon="more_vert"></v-icon>
           </v-btn>
         </template>
@@ -19,12 +19,25 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      <v-btn
+      v-if="false"
+        density="compact"
+        class="ml-3 pl-2 mr-2  handle"
+        icon="drag_indicator"
+        @touchstart="vibro"
+      ></v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue';
 const emit = defineEmits(['delete-list'])
+
+const vibro = () => {
+  setTimeout(() => {
+    window.navigator.vibrate(50);
+  }, 100);
+};
 
 const props = defineProps(['list'])
 
