@@ -12,9 +12,8 @@
       <v-spacer key="2"></v-spacer>
       <v-btn key="3" v-if="isListPage" @click="router.push('/')" color="primary">done</v-btn>
       <v-app-bar-nav-icon key="4" v-else variant="text" @click.stop="drawer = !drawer">
-        <v-badge :color="showBadge" location="bottom right" dot>
-          <v-avatar :image="userAvatar()" icon="account_circle" size="32"></v-avatar>
-        </v-badge>
+        <v-icon v-if="notificationsQuantity" class="ml-n2 mb-n1 align-self-end" absolute style="z-index: 1000" color="error" icon="md:notifications" size="16"></v-icon>
+        <v-avatar :image="userAvatar()" class="ml-n2" icon="account_circle" size="32"></v-avatar>
       </v-app-bar-nav-icon>
     </v-fade-transition>
   </v-app-bar>
@@ -33,7 +32,7 @@
         ></v-badge>
       </v-list-item-title>
     </v-list-item>
-    <v-list-item class="mb-2"> 
+    <v-list-item class="mb-2" @click="moveToSettings"> 
       <v-list-item-title class="d-flex">
         <v-icon class="mr-2" icon="settings"></v-icon>
         Settings
@@ -72,14 +71,12 @@ const router = useRouter()
 
 const isListPage = computed(() => route.path === '/list')
 
-const notificationsQuantity = computed(() => 12)
-const showBadge = computed(() => {
-  if (notificationsQuantity.value) {
-    return 'error'
-  } else {
-    return 'transparent'
-  }
-})
+// Notifications placeholder
+const notificationsQuantity = computed(() => 0)
+
+const moveToSettings = () => {
+  router.push({name: 'Settings'})
+}
 
 const auth = getAuth()
 
